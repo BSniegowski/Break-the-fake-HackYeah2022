@@ -1,0 +1,39 @@
+#root {
+    background-color:#187498;
+    height: 100%;
+    border-radius: 32px;
+}
+
+.App {
+    text-align: center;
+    background-color: #187498;
+}
+
+.App-googleSmt-load {
+    text-align: center;
+    padding-top: 60px;
+}
+
+.App-chooseRaiting {
+    text-align: center;
+    padding-top: 60px;
+}
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+
+.spiin{
+  animation-name: spin;
+  animation-duration: 5000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+
