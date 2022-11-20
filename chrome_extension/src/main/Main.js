@@ -28,25 +28,24 @@ export const Main = () => {
             });
         }, [])
         useLayoutEffect(urlUpdate, [urlUpdate]);
-        setInterval(urlUpdate, 100);
-
-        useLayoutEffect(() => {
-            console.log(url)
-            if (url === "https://www.google.com/" || url === "google.com" || url === undefined || url === "chrome://newtab/") {
-                setCurrentPage({name: 'google'});
-                return;
-            }
-            if (url.includes("google.com") && url.includes("search?")) {
-                setCurrentPage({name: 'googleSearch'});
-                return;
-            }
-            sendMessageAndGetFeedback("isItPost", (response) => {
-                if (response != null) {
-                    setCurrentPage(response);
+        const urlUpdate2 = useCallback(() => {
+                if (url === "https://www.google.com/" || url === "google.com" || url === undefined || url === "chrome://newtab/") {
+                    setCurrentPage({name: 'google'});
+                    return;
                 }
-            })
-        }, [url]);
-    return <OnPost source={curretPage.source} date={curretPage.date}/>
+                if (url.includes("google.com") && url.includes("search?")) {
+                    setCurrentPage({name: 'googleSearch'});
+                    return;
+                }
+                sendMessageAndGetFeedback("isItPost", (response) => {
+                    if (response != null) {
+                        setCurrentPage(response);
+                    }
+                })
+            }
+        )
+        useEffect(urlUpdate2, []);
+        setInterval(urlUpdate2, 100);
         if (curretPage.name === "google") {
             return <GoogleSomething/>;
         }
@@ -54,7 +53,7 @@ export const Main = () => {
             return <GoogleSearch/>
         }
         if (curretPage.name === "post") {
-
+            return <OnPost source={curretPage.source} date={curretPage.date}/>
         }
         return <Box sx={{textAlign: "center", paddingTop: "95px"}}>
             <Box sx={{paddingTop: "10px"}}>

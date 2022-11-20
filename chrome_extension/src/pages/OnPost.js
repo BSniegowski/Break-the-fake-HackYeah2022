@@ -52,7 +52,7 @@ export const OnPost = ({source, date}) => {
     }
 
     const sendRequest = (isAck) => {
-        postData("localhost:8000/??", {
+        postData("http://127.0.0.1:8000/addFakeVote/", {
             "url": window.location.href,
             "resource": {source},
             "datePublished": {date},

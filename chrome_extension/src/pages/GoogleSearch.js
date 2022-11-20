@@ -8,7 +8,7 @@ import {postData} from "../functions/postData";
 export const GoogleSearch = () => {
     useEffect(() => {
         sendMessageAndGetFeedback("giveMeLinks", (response) => {
-            postData("localhost:8000", response).then(
+            postData("http://127.0.0.1/getArticles/", response).then(
                 (date) => {
                     setResponseFromServer(date);
                 }
