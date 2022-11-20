@@ -8,7 +8,7 @@ import {postData} from "../functions/postData";
 export const GoogleSearch = () => {
     useEffect(() => {
         sendMessageAndGetFeedback("giveMeLinks", (response) => {
-            postData("http://127.0.0.1/getArticles/", response).then(
+            postData("http://vladislav.pythonanywhere.com/getArticles/", response).then(
                 (date) => {
                     setResponseFromServer(date);
                 }
@@ -19,12 +19,12 @@ export const GoogleSearch = () => {
     const [responseFromServer, setResponseFromServer] = useState('');
 
     if (responseFromServer === "") {
-        return <Box sx={{textAlign: "center", paddingTop: "95px"}}>
+        return <Box sx={{textAlign: "center", paddingTop: "45px"}}>
             <CircularProgress size={90} thickness={8.9} sx={{color: "#36AE7C"}}/>
         </Box>;
     }
-    console.log(responseFromServer)
-    return <Box className="spiin">
+     sendMessageAndGetFeedback({special:responseFromServer}, responseFromServer);
+    return <Box >
         <DoneOutlineIcon sx={{fontSize: 80, color: "#F9D923"}}/>
     </Box>
 

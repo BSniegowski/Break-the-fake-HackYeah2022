@@ -13,7 +13,7 @@ import {Box, Button, IconButton, Link, Typography} from "@mui/material";
 
 export const Main = () => {
         const [url, setUrl] = useState('');
-        const [curretPage, setCurrentPage] = useState({name: ''});
+        const [curretPage, setCurrentPage] = useState({name: 'post'});
         // unknown
         // google main
 
@@ -55,7 +55,7 @@ export const Main = () => {
         if (curretPage.name === "post") {
             return <OnPost source={curretPage.source} date={curretPage.date}/>
         }
-        return <Box sx={{textAlign: "center", paddingTop: "95px"}}>
+        return <Box sx={{textAlign: "center", paddingTop: "55px"}}>
             <Box sx={{paddingTop: "10px"}}>
                 <Link href="https://google.com" target="_blank" color="inherit">
                     <IconButton>

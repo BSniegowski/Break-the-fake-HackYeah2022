@@ -33,6 +33,11 @@ export const messagesFromReactAppListener = (message, sender, response) => {
         message,
         sender,
     })
+//    if(typeof  message.message === "object"){
+//        message.message.fakeLikelihoods
+// twoja metods
+//        return
+//    }
 
     if ((sender == null || sender.id === chrome.runtime.id) && message.from === "React" &&
         message.message === 'giveMeLinks') {
