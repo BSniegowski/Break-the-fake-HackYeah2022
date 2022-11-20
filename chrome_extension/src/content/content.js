@@ -25,19 +25,18 @@ const getSource = () => {
 }
 
 const getUrlFromBlock = (block) => {
-    const x = block.childNodes[1].childNodes[0].textContent
-    return x.slice(0, x.search("›") - 1)
+    return block.firstChild.firstChild.firstChild.href
 }
 export const messagesFromReactAppListener = (message, sender, response) => {
     console.log('[content.js]. Message received', {
         message,
         sender,
     })
-//    if(typeof  message.message === "object"){
-//        message.message.fakeLikelihoods
-// twoja metods
-//        return
-//    }
+   if(typeof  message === "object"){
+       const fakeLikelihoods = message.articles
+       addFakeLikelihood(fakeLikelihoods)
+       return
+   }
 
     if ((sender == null || sender.id === chrome.runtime.id) && message.from === "React" &&
         message.message === 'giveMeLinks') {
@@ -67,6 +66,20 @@ export const messagesFromReactAppListener = (message, sender, response) => {
     }
 
     response(null);
+}
+
+function addFakeLikelihood(fakeLikelihoods) {
+    const articles = getBlocksFromGooglePage()
+    for (let article of articles){
+        const url = getUrlFromBlock(article)
+        const d = document.createElement('div')
+        const text = document.createTextNode("fake-"+fakeLikelihoods[url]+'%')
+        d.appendChild(text)
+        d.style.position = 'absolute'
+        d.style.top = '0px'
+        d.style.right = '0px'
+        article.firstChild.appendChild(d)
+    }
 }
 
 /**
