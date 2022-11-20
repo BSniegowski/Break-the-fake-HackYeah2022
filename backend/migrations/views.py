@@ -61,20 +61,32 @@ def addFakeVote(request):
 
 
 def resource_fake_likelihood(resource: str):
-    votes = Articles.objects.filter(resource=resource).aggregate(fake=Sum('fake_votes') or 0,
-                                                                 non_fake=Sum('non_fake_votes') or 0)
-    return ((votes.fake + 1) * 100) / (votes.fake + votes.non_fake + 2)
+    votes = Articles.objects.filter(resource=resource) \
+        .aggregate(fake=Sum('fake_votes') or 0, non_fake=Sum('non_fake_votes') or 0)
+
+    if votes['fake']!=None:
+        return (((votes['fake'] + 1) * 100) / (votes["fake"] + votes["non_fake"] + 2))
+    else:
+        return 0.5
 
 
-def article_fake_likelihood(url: str):
-    article_weight = 0.5
-    resource_weight = 0.5
-    votes = Articles.objects.filter(url=url)[0]
-    resource = votes.resource
-    article_ratio = 0.5
-    if votes:
-        article_ratio = ((votes.fake_votes + 1) * 100) / (votes.fake_votes + votes.non_fake_votes + 2)
-    return article_ratio * article_weight + resource_fake_likelihood(resource) * resource_weight
+def getResource(urlOfArticle: str):
+    splitted = urlOfArticle.split(".")
+    return splitted[-2].split("/")[-1] + "." + splitted[-1].split("/")[0]
+
+
+def article_fake_likelihood(urlOfArticle: str):
+    resource_points = resource_fake_likelihood(getResource(urlOfArticle))
+
+    votesOnArticle = Articles.objects.filter(url=urlOfArticle)
+
+    if (votesOnArticle):
+       votesOnArticle = votesOnArticle[0]
+       return (((votesOnArticle.fake_votes + 1) * 100) / (
+               votesOnArticle.fake_votes + votesOnArticle.non_fake_votes + 2)
+               + resource_points) / 2
+    return resource_points
+
 
 @csrf_exempt
 def getArticles(request):
