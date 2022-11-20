@@ -26,16 +26,6 @@ def index(request):
 #     return HttpResponse(status=200)
 
 
-def getArticles(request):
-    if request.method != 'GET':
-        return HttpResponse(status=400)
-    # avResources = list()
-    for entry in Articles.objects.all():
-        print(vars(entry))
-    return HttpResponse(status=200)
-    # return JsonResponse({avResources})
-
-
 # @csrf_exempt
 # def deleteResources(request):
 #     if request.method != 'DELETE':
@@ -50,17 +40,15 @@ def getArticles(request):
 #         # print(availableResources.objects.filter(link=url))
 #         articles.objects.filter(link=url).delete()
 #     return HttpResponse(status=202)
-
 @csrf_exempt
 def addFakeVote(request):
-    if request.method != 'POST':
-        return HttpResponse(status=400)
     data = json.loads(request.body)
     url = data['url']
     isFake = data['isFake']
-    isFake = 1 if isFake.lower() in ['1', 'yes', 'true'] else 0
-    entry = Articles.objects.filter(url=url)[0]
+    isFake = int(isFake)
+    entry = list(Articles.objects.filter(url=url))
     if entry:
+        entry = entry[0]
         entry.fake_votes += isFake
         entry.non_fake_votes += (1 - isFake)
     else:
@@ -88,10 +76,8 @@ def article_fake_likelihood(url: str):
         article_ratio = ((votes.fake_votes + 1) * 100) / (votes.fake_votes + votes.non_fake_votes + 2)
     return article_ratio * article_weight + resource_fake_likelihood(resource) * resource_weight
 
-
-def get_articles_fake_likelihood(request):
-    if request.method != 'POST':
-        return HttpResponse(status=400)
+@csrf_exempt
+def getArticles(request):
     data = json.loads(request.body)
     articles = data['articles']
     # assuming articles is a list
